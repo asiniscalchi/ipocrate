@@ -57,6 +57,27 @@ Expected response:
 {"status":"ok"}
 ```
 
+## Docker
+
+Build the application image locally:
+
+```sh
+docker build -t ipocrate .
+```
+
+Run it on port `8080`:
+
+```sh
+docker run --rm -p 8080:8080 ipocrate
+```
+
+On pushes to `main`, CI publishes the image to GitHub Container Registry with the commit SHA and `latest` tags:
+
+```text
+ghcr.io/asiniscalchi/ipocrate:<commit-sha>
+ghcr.io/asiniscalchi/ipocrate:latest
+```
+
 ## Project Layout
 
 - `src/`: Rust backend
