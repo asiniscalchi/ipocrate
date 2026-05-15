@@ -23,17 +23,27 @@ cargo run
 
 Then open <http://localhost:8080/>.
 
-The backend listens on port `8080` by default. You can override runtime configuration with either CLI flags or environment variables:
+The repository includes a local `.env` that binds the backend to all interfaces on port `8080`:
 
 ```sh
-cargo run -- --port 3000 --frontend-dist frontend/dist
+HOST=0.0.0.0
+PORT=8080
+FRONTEND_DIST=frontend/dist
+```
+
+The backend defaults to `127.0.0.1:8080` when no `.env`, environment variable, or CLI flag is present. You can override runtime configuration with CLI flags, environment variables, or `.env` values:
+
+```sh
+cargo run -- --host 127.0.0.1 --port 3000 --frontend-dist frontend/dist
 ```
 
 ```sh
-PORT=3000 FRONTEND_DIST=frontend/dist cargo run
+HOST=127.0.0.1 PORT=3000 FRONTEND_DIST=frontend/dist cargo run
 ```
 
-CLI flags take precedence over environment variables, and environment variables take precedence over defaults.
+CLI flags take precedence over environment variables, `.env` fills in missing environment variables, and defaults are used last.
+
+When binding to all interfaces with `HOST=0.0.0.0`, startup logs include the concrete local URLs detected from network interfaces.
 
 ## Health Check
 

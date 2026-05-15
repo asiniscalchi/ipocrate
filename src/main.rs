@@ -1,11 +1,12 @@
 use clap::Parser;
-use ipocrate::{Config, ensure_frontend_dist, router};
+use ipocrate::{Config, ensure_frontend_dist, router, served_urls};
 use tokio::net::TcpListener;
 use tracing::info;
 use tracing_subscriber::{EnvFilter, fmt, layer::SubscriberExt, util::SubscriberInitExt};
 
 #[tokio::main]
 async fn main() -> std::io::Result<()> {
+    dotenvy::dotenv().ok();
     init_tracing();
 
     let config = Config::parse();
@@ -19,6 +20,9 @@ async fn main() -> std::io::Result<()> {
         frontend_dist = %config.frontend_dist.display(),
         "starting ipocrate backend"
     );
+    for url in served_urls(address) {
+        info!(%url, "serving ipocrate");
+    }
 
     axum::serve(listener, router(config.frontend_dist)).await
 }
